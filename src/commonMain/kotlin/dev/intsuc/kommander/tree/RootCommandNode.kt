@@ -1,6 +1,7 @@
 package dev.intsuc.kommander.tree
 
 import dev.intsuc.kommander.StringReader
+import dev.intsuc.kommander.builder.ArgumentBuilder
 import dev.intsuc.kommander.context.CommandContext
 import dev.intsuc.kommander.context.CommandContextBuilder
 import dev.intsuc.kommander.suggestion.Suggestions

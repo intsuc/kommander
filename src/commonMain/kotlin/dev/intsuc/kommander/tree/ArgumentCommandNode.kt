@@ -4,6 +4,7 @@ import dev.intsuc.kommander.Command
 import dev.intsuc.kommander.RedirectModifier
 import dev.intsuc.kommander.StringReader
 import dev.intsuc.kommander.arguments.ArgumentType
+import dev.intsuc.kommander.builder.RequiredArgumentBuilder
 import dev.intsuc.kommander.context.CommandContext
 import dev.intsuc.kommander.context.CommandContextBuilder
 import dev.intsuc.kommander.context.ParsedArgument

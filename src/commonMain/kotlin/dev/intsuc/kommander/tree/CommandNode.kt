@@ -4,6 +4,7 @@ import dev.intsuc.kommander.AmbiguityConsumer
 import dev.intsuc.kommander.Command
 import dev.intsuc.kommander.RedirectModifier
 import dev.intsuc.kommander.StringReader
+import dev.intsuc.kommander.builder.ArgumentBuilder
 import dev.intsuc.kommander.context.CommandContext
 import dev.intsuc.kommander.context.CommandContextBuilder
 import dev.intsuc.kommander.suggestion.Suggestions
