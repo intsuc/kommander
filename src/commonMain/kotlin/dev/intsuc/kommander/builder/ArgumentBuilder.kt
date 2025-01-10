@@ -17,7 +17,7 @@ abstract class ArgumentBuilder<S, T : ArgumentBuilder<S, T>> {
 
     protected abstract fun getThis(): T
 
-    fun the(argument: ArgumentBuilder<S, *>): T {
+    fun then(argument: ArgumentBuilder<S, *>): T {
         if (redirect != null) {
             throw IllegalStateException("Cannot add children to a redirected node")
         }
