@@ -27,8 +27,6 @@ class BoolArgumentType private constructor() : ArgumentType<Boolean> {
 
         fun bool(): BoolArgumentType = BoolArgumentType()
 
-        fun getBool(context: CommandContext<*>, name: String): Boolean {
-            return context.getArgument(name, Boolean::class)
-        }
+        fun getBool(context: CommandContext<*>, name: String): Boolean = context.getArgument(name)
     }
 }
