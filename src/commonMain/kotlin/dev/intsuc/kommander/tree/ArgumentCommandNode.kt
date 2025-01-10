@@ -28,7 +28,7 @@ class ArgumentCommandNode<S, T>(
     override fun parse(reader: StringReader, contextBuilder: CommandContextBuilder<S>) {
         val start = reader.cursor
         val result = type.parse(reader, contextBuilder.source)
-        val parsed = ParsedArgument(start, reader.cursor, result)
+        val parsed = ParsedArgument<S, _>(start, reader.cursor, result)
 
         contextBuilder.withArgument(name, parsed)
         contextBuilder.withNode(this, parsed.range)
@@ -39,7 +39,7 @@ class ArgumentCommandNode<S, T>(
     }
 
     override fun createBuilder(): RequiredArgumentBuilder<S, *> {
-        val builder = RequiredArgumentBuilder.argument(name, type)
+        val builder = RequiredArgumentBuilder.argument<S, _>(name, type)
         builder.requires(requirement)
         builder.forward(redirect, redirectModifier, isFork())
         builder.suggests(customSuggestions)
@@ -54,7 +54,7 @@ class ArgumentCommandNode<S, T>(
             val reader = StringReader(input)
             type.parse(reader)
             return !reader.canRead() || reader.peek() == ' '
-        } catch (ignored: CommandSyntaxException) {
+        } catch (_: CommandSyntaxException) {
             return false
         }
     }

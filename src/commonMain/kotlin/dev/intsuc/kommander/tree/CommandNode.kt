@@ -68,7 +68,7 @@ abstract class CommandNode<S>(
                     }
                 }
 
-                if (matches.size > 0) {
+                if (matches.isNotEmpty()) {
                     consumer.ambiguous(this, child, sibling, matches)
                     matches = hashSetOf()
                 }
@@ -91,7 +91,7 @@ abstract class CommandNode<S>(
     }
 
     override fun hashCode(): Int {
-        return 31 * _children.hashCode() + (if (command != null) command.hashCode() else 0)
+        return 31 * _children.hashCode() + (command?.hashCode() ?: 0)
     }
 
     abstract val name: String

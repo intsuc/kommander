@@ -35,12 +35,12 @@ abstract class ArgumentBuilder<S, T : ArgumentBuilder<S, T>> {
 
     val arguments: Collection<CommandNode<S>> get() = _arguments.children
 
-    fun executes(command: Command<S>): T {
+    fun executes(command: Command<S>?): T {
         this.command = command
         return getThis()
     }
 
-    fun requires(requirement: (S) -> Boolean): T {
+    fun requires(requirement: ((S) -> Boolean)): T {
         this.requirement = requirement
         return getThis()
     }
@@ -57,7 +57,7 @@ abstract class ArgumentBuilder<S, T : ArgumentBuilder<S, T>> {
         return forward(target, modifier, true)
     }
 
-    fun forward(target: CommandNode<S>, modifier: RedirectModifier<S>?, fork: Boolean): T {
+    fun forward(target: CommandNode<S>?, modifier: RedirectModifier<S>?, fork: Boolean): T {
         if (_arguments.children.isNotEmpty()) {
             throw IllegalStateException("Cannot forward a node with children")
         }

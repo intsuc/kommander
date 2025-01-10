@@ -80,7 +80,7 @@ class LiteralCommandNode<S>(
     }
 
     override fun createBuilder(): ArgumentBuilder<S, *> {
-        val builder = LiteralArgumentBuilder.literal(literal)
+        val builder = LiteralArgumentBuilder.literal<S>(literal)
         builder.requires(requirement)
         builder.forward(redirect, redirectModifier, isFork())
         if (command != null) {

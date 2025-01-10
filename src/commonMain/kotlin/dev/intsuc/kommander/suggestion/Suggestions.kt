@@ -60,7 +60,7 @@ class Suggestions(
             for (suggestion in suggestions) {
                 texts += suggestion.expand(command, range)
             }
-            val sorted = ArrayList(texts)
+            val sorted = texts.toMutableList()
             sorted.sortWith { a, b -> a.compareToIgnoreCase(b) }
             return Suggestions(range, sorted)
         }

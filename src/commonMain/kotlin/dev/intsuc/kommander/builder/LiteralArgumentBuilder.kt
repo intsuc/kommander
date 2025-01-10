@@ -8,7 +8,7 @@ class LiteralArgumentBuilder<S>(
 ) : ArgumentBuilder<S, LiteralArgumentBuilder<S>>() {
     override fun getThis(): LiteralArgumentBuilder<S> = this
 
-    override fun build(): CommandNode<S> {
+    override fun build(): LiteralCommandNode<S> {
         val result = LiteralCommandNode(literal, command, requirement, redirect, redirectModifier, isFork())
 
         for (argument in arguments) {
@@ -19,6 +19,6 @@ class LiteralArgumentBuilder<S>(
     }
 
     companion object {
-        fun literal(name: String): LiteralArgumentBuilder<String> = LiteralArgumentBuilder(name)
+        fun <S> literal(name: String): LiteralArgumentBuilder<S> = LiteralArgumentBuilder(name)
     }
 }

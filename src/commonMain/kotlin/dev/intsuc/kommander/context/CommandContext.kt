@@ -11,9 +11,9 @@ class CommandContext<S>(
     val command: Command<S>?,
     val rootNode: CommandNode<S>,
     val nodes: List<ParsedCommandNode<S>>,
-    val range: StringRange,
+    val range: StringRange?,
     val child: CommandContext<S>?,
-    val redirectModifier: RedirectModifier<S>,
+    val redirectModifier: RedirectModifier<S>?,
     private val forks: Boolean,
 ) {
     fun copyFor(source: S): CommandContext<S> {
@@ -27,7 +27,7 @@ class CommandContext<S>(
         get() {
             var result = this
             while (result.child != null) {
-                result = result.child!!
+                result = result.child
             }
             return result
         }

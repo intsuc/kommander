@@ -8,14 +8,13 @@ import dev.intsuc.kommander.tree.CommandNode
 class CommandContextBuilder<S> {
     private val _arguments: MutableMap<String, ParsedArgument<S, *>> = linkedMapOf()
     private val rootNode: CommandNode<S>
-    private val _nodes: MutableList<ParsedCommandNode<S>> = arrayListOf()
+    private val _nodes: MutableList<ParsedCommandNode<S>> = mutableListOf()
     val dispatcher: CommandDispatcher<S>
-    var source: S? = null
-        private set
+    var source: S
     var command: Command<S>? = null
         private set
     private var child: CommandContextBuilder<S>? = null
-    var range: StringRange? = null
+    var range: StringRange
         private set
     private var modifier: RedirectModifier<S>? = null
     private var forks: Boolean = false
@@ -39,21 +38,21 @@ class CommandContextBuilder<S> {
 
     val arguments: Map<String, ParsedArgument<S, *>> get() = _arguments
 
-    fun withCommand(command: Command<S>): CommandContextBuilder<S> {
+    fun withCommand(command: Command<S>?): CommandContextBuilder<S> {
         this.command = command
         return this
     }
 
     fun withNode(node: CommandNode<S>, range: StringRange): CommandContextBuilder<S> {
         _nodes.add(ParsedCommandNode(node, range))
-        this.range = StringRange.encompassing(this.range!!, range)
+        this.range = StringRange.encompassing(this.range, range)
         this.modifier = node.redirectModifier
         this.forks = node.isFork()
         return this
     }
 
     fun copy(): CommandContextBuilder<S> {
-        val copy = CommandContextBuilder(dispatcher, source!!, rootNode, range!!.start)
+        val copy = CommandContextBuilder(dispatcher, source!!, rootNode, range.start)
         copy.command = command
         copy._arguments += _arguments
         copy._nodes += _nodes
@@ -80,19 +79,19 @@ class CommandContextBuilder<S> {
     val nodes: List<ParsedCommandNode<S>> get() = _nodes
 
     fun build(input: String): CommandContext<S> {
-        TODO()
+        return CommandContext(source, input, arguments, command, rootNode, nodes, range, child?.build(input), modifier, forks)
     }
 
     fun findSuggestionContext(cursor: Int): SuggestionContext<S> {
-        if (range!!.start <= cursor) {
-            if (range!!.end < cursor) {
+        if (range.start <= cursor) {
+            if (range.end < cursor) {
                 if (child != null) {
                     return child!!.findSuggestionContext(cursor)
                 } else if (_nodes.isNotEmpty()) {
                     val last = _nodes.last()
                     return SuggestionContext(last.node, last.range.end + 1)
                 } else {
-                    return SuggestionContext(rootNode, range!!.start)
+                    return SuggestionContext(rootNode, range.start)
                 }
             } else {
                 var prev = rootNode
@@ -106,7 +105,7 @@ class CommandContextBuilder<S> {
                 if (prev == null) {
                     throw IllegalStateException("Can't find node before cursor")
                 }
-                return SuggestionContext(prev, range!!.start)
+                return SuggestionContext(prev, range.start)
             }
         }
         throw IllegalStateException("Can't find node before cursor")

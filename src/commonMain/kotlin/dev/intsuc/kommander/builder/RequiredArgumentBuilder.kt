@@ -12,14 +12,14 @@ class RequiredArgumentBuilder<S, T>(
     var suggestionsProvider: SuggestionProvider<S>? = null
         private set
 
-    fun suggests(provider: SuggestionProvider<S>): RequiredArgumentBuilder<S, T> {
+    fun suggests(provider: SuggestionProvider<S>?): RequiredArgumentBuilder<S, T> {
         suggestionsProvider = provider
         return this
     }
 
     override fun getThis(): RequiredArgumentBuilder<S, T> = this
 
-    override fun build(): CommandNode<S> {
+    override fun build(): ArgumentCommandNode<S, T> {
         val result = ArgumentCommandNode(name, type, command, requirement, redirect, redirectModifier, isFork(), suggestionsProvider)
 
         for (child in arguments) {
