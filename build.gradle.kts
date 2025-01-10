@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "dev.intsuc"
-version = "0.0.0"
+version = "1.3.10"
 
 repositories {
     mavenCentral()
