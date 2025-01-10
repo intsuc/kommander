@@ -102,9 +102,9 @@ class CommandContextBuilder<S> {
                     }
                     prev = node.node
                 }
-                if (prev == null) {
-                    throw IllegalStateException("Can't find node before cursor")
-                }
+                // if (prev == null) {
+                //     throw IllegalStateException("Can't find node before cursor")
+                // }
                 return SuggestionContext(prev, range.start)
             }
         }
