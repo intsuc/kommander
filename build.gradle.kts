@@ -19,8 +19,15 @@ kotlin {
     }
 
     sourceSets {
+        commonMain {
+            dependencies {
+                implementation(libs.kotlinxCoroutinesCore)
+            }
+        }
+
         commonTest {
             dependencies {
+                implementation(libs.kotlinxCoroutinesTest)
                 implementation(kotlin("test"))
             }
         }

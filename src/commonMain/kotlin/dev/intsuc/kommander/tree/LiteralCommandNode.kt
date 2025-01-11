@@ -51,9 +51,9 @@ class LiteralCommandNode<S>(
         return -1
     }
 
-    override fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
+    override suspend fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
         return if (literalLowerCase.startsWith(builder.remainingLowerCase)) {
-            builder.suggest(literal).buildFuture()
+            builder.suggest(literal).build()
         } else {
             Suggestions.empty()
         }

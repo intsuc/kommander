@@ -34,7 +34,7 @@ class ArgumentCommandNode<S, T>(
         contextBuilder.withNode(this, parsed.range)
     }
 
-    override fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
+    override suspend fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
         return customSuggestions?.getSuggestions(context, builder) ?: type.listSuggestions(context, builder)
     }
 

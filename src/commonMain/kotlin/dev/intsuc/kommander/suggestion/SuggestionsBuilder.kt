@@ -18,10 +18,6 @@ class SuggestionsBuilder(
         return Suggestions.create(input, result)
     }
 
-    fun buildFuture(): Suggestions {
-        return build()
-    }
-
     fun suggest(text: String): SuggestionsBuilder {
         if (text == remaining) {
             return this

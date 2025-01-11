@@ -2,6 +2,8 @@
 kotlin = "2.1.0"
 
 [libraries]
+kotlinxCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1"
+kotlinxCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1"
 
 [plugins]
 multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

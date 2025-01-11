@@ -20,7 +20,7 @@ class RootCommandNode<S> : CommandNode<S>(
 
     override fun parse(reader: StringReader, contextBuilder: CommandContextBuilder<S>) = Unit
 
-    override fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder) = Suggestions.empty()
+    override suspend fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions = Suggestions.empty()
 
     override fun isValidInput(input: String): Boolean = false
 

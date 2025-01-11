@@ -10,14 +10,14 @@ class BoolArgumentType private constructor() : ArgumentType<Boolean> {
         return reader.readBoolean()
     }
 
-    override fun <S> listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
+    override suspend fun <S> listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
         if ("true".startsWith(builder.remainingLowerCase)) {
             builder.suggest("true")
         }
         if ("false".startsWith(builder.remainingLowerCase)) {
             builder.suggest("false")
         }
-        return builder.buildFuture()
+        return builder.build()
     }
 
     override val examples: Collection<String> get() = EXAMPLES

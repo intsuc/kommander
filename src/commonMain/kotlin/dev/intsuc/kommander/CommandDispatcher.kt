@@ -9,6 +9,9 @@ import dev.intsuc.kommander.suggestion.SuggestionsBuilder
 import dev.intsuc.kommander.tree.CommandNode
 import dev.intsuc.kommander.tree.LiteralCommandNode
 import dev.intsuc.kommander.tree.RootCommandNode
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 class CommandDispatcher<S>(
     val root: RootCommandNode<S>,
@@ -228,11 +231,11 @@ class CommandDispatcher<S>(
         return self
     }
 
-    fun getCompletionSuggestions(parse: ParseResults<S>): Suggestions {
+    suspend fun getCompletionSuggestions(parse: ParseResults<S>): Suggestions {
         return getCompletionSuggestions(parse, parse.reader.totalLength)
     }
 
-    fun getCompletionSuggestions(parse: ParseResults<S>, cursor: Int): Suggestions {
+    suspend fun getCompletionSuggestions(parse: ParseResults<S>, cursor: Int): Suggestions {
         val context = parse.context
 
         val nodeBeforeCursor = context.findSuggestionContext(cursor)
@@ -242,21 +245,19 @@ class CommandDispatcher<S>(
         val fullInput = parse.reader.string
         val truncatedInput = fullInput.substring(0, cursor)
         val truncatedInputLowerCase = truncatedInput.lowercase()
-        val futures = Array<Suggestions?>(parent.children.size) { null }
-        var i = 0
-        for (node in parent.children) {
-            var future = Suggestions.empty()
-            try {
-                future = node.listSuggestions(context.build(truncatedInput), SuggestionsBuilder(truncatedInput, truncatedInputLowerCase, start))
-            } catch (_: CommandSyntaxException) {
+        val futures = coroutineScope {
+            parent.children.map { node ->
+                async {
+                    try {
+                        node.listSuggestions(context.build(truncatedInput), SuggestionsBuilder(truncatedInput, truncatedInputLowerCase, start))
+                    } catch (_: CommandSyntaxException) {
+                        Suggestions.empty()
+                    }
+                }
             }
-            futures[i++] = future
         }
 
-        val suggestions = mutableListOf<Suggestions>()
-        for (future in futures) {
-            suggestions += future!!
-        }
+        val suggestions = futures.awaitAll()
         return Suggestions.merge(fullInput, suggestions)
     }
 

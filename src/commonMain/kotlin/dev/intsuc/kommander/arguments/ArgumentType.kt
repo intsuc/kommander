@@ -12,7 +12,7 @@ interface ArgumentType<T> {
         return parse(reader)
     }
 
-    fun <S> listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
+    suspend fun <S> listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions {
         return Suggestions.empty()
     }
 

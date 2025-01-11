@@ -100,7 +100,7 @@ abstract class CommandNode<S>(
 
     abstract fun parse(reader: StringReader, contextBuilder: CommandContextBuilder<S>)
 
-    abstract fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions
+    abstract suspend fun listSuggestions(context: CommandContext<S>, builder: SuggestionsBuilder): Suggestions
 
     abstract fun createBuilder(): ArgumentBuilder<S, *>
 

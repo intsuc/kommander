@@ -6,6 +6,7 @@ import dev.intsuc.kommander.builder.LiteralArgumentBuilder.Companion.literal
 import dev.intsuc.kommander.builder.RequiredArgumentBuilder.Companion.argument
 import dev.intsuc.kommander.context.StringRange
 import dev.intsuc.kommander.suggestion.Suggestion
+import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,7 +20,7 @@ class CommandSuggestionsTest {
         subject = CommandDispatcher()
     }
 
-    private fun testSuggestions(contents: String, cursor: Int, range: StringRange, vararg suggestions: String) {
+    private suspend fun testSuggestions(contents: String, cursor: Int, range: StringRange, vararg suggestions: String) {
         val result = subject.getCompletionSuggestions(subject.parse(contents, source), cursor)
         assertEquals(result.range, range)
 
@@ -40,7 +41,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_rootCommands() {
+    fun getCompletionSuggestions_rootCommands() = runTest {
         subject.register(literal("foo"))
         subject.register(literal("bar"))
         subject.register(literal("baz"))
@@ -52,7 +53,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_rootCommands_withInputOffset() {
+    fun getCompletionSuggestions_rootCommands_withInputOffset() = runTest {
         subject.register(literal("foo"))
         subject.register(literal("bar"))
         subject.register(literal("baz"))
@@ -64,7 +65,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_rootCommands_partial() {
+    fun getCompletionSuggestions_rootCommands_partial() = runTest {
         subject.register(literal("foo"))
         subject.register(literal("bar"))
         subject.register(literal("baz"))
@@ -76,7 +77,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_rootCommands_partial_withInputOffset() {
+    fun getCompletionSuggestions_rootCommands_partial_withInputOffset() = runTest {
         subject.register(literal("foo"))
         subject.register(literal("bar"))
         subject.register(literal("baz"))
@@ -88,7 +89,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_subCommands() {
+    fun getCompletionSuggestions_subCommands() = runTest {
         subject.register(
             literal<Any>("parent")
                 .then(literal("foo"))
@@ -103,7 +104,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_movingCursor_subCommands() {
+    fun getCompletionSuggestions_movingCursor_subCommands() = runTest {
         subject.register(
             literal<Any>("parent_one")
                 .then(literal("faz"))
@@ -128,7 +129,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_subCommands_partial() {
+    fun getCompletionSuggestions_subCommands_partial() = runTest {
         subject.register(
             literal<Any>("parent")
                 .then(literal("foo"))
@@ -144,7 +145,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_subCommands_partial_withInputOffset() {
+    fun getCompletionSuggestions_subCommands_partial_withInputOffset() = runTest {
         subject.register(
             literal<Any>("parent")
                 .then(literal("foo"))
@@ -160,7 +161,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_redirect() {
+    fun getCompletionSuggestions_redirect() = runTest {
         val actual = subject.register(literal<Any>("actual").then(literal("sub")))
         subject.register(literal<Any>("redirect").redirect(actual))
 
@@ -172,7 +173,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_redirectPartial() {
+    fun getCompletionSuggestions_redirectPartial() = runTest {
         val actual = subject.register(literal<Any>("actual").then(literal("sub")))
         subject.register(literal<Any>("redirect").redirect(actual))
 
@@ -184,7 +185,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_movingCursor_redirect() {
+    fun getCompletionSuggestions_movingCursor_redirect() = runTest {
         val actualOne = subject.register(
             literal<Any>("actual_one")
                 .then(literal("faz"))
@@ -192,7 +193,7 @@ class CommandSuggestionsTest {
                 .then(literal("gaz"))
         )
 
-        val actualTwo = subject.register(literal("actual_two"))
+        subject.register(literal("actual_two"))
 
         subject.register(literal<Any>("redirect_one").redirect(actualOne))
         subject.register(literal<Any>("redirect_two").redirect(actualOne))
@@ -209,7 +210,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_redirectPartial_withInputOffset() {
+    fun getCompletionSuggestions_redirectPartial_withInputOffset() = runTest {
         val actual = subject.register(literal<Any>("actual").then(literal("sub")))
         subject.register(literal<Any>("redirect").redirect(actual))
 
@@ -221,7 +222,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_redirect_lots() {
+    fun getCompletionSuggestions_redirect_lots() = runTest {
         val loop = subject.register(literal("redirect"))
         subject.register(
             literal<Any>("redirect")
@@ -241,7 +242,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_execute_simulation() {
+    fun getCompletionSuggestions_execute_simulation() = runTest {
         val execute = subject.register(literal("execute"))
         subject.register(
             literal<Any>("execute")
@@ -272,7 +273,7 @@ class CommandSuggestionsTest {
     }
 
     @Test
-    fun getCompletionSuggestions_execute_simulation_partial() {
+    fun getCompletionSuggestions_execute_simulation_partial() = runTest {
         val execute = subject.register(literal("execute"))
         subject.register(
             literal<Any>("execute")
